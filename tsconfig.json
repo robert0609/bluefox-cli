@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "rootDir": ".",
     "strict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": true,
     "noImplicitReturns": false,

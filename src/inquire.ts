@@ -1,13 +1,22 @@
 import Commander from 'commander';
-import inquirer from 'inquirer';
+import inquirer, { QuestionCollection } from 'inquirer';
 import packageInfo from '../package.json';
 import semver from 'semver';
+import { IManifest } from './IManifest.js';
 
 export interface IInquireResult {
   [key: string]: any;
 }
 
-export async function inquire() {
+export async function inquire(manifest: IManifest) {
+  const categories = Object.keys(manifest);
+  const categoryOptions = categories.map((n, i) => {
+    return {
+      name: n,
+      value: i
+    }
+  });
+
   return await new Promise<IInquireResult>((resolve, reject) => {
     const program = new Commander.Command();
     program.version(packageInfo.version);
@@ -17,76 +26,51 @@ export async function inquire() {
       .description('init project')
       .action(async function () {
         try {
-          const answers = await inquirer.prompt([{
+          const { category } = await inquirer.prompt({
             type: 'list',
             name: 'category',
             message: 'Please select project category:',
-            choices: [
-              { name: 'vue micro app', value: 1 },
-              { name: 'vue component', value: 2 }
-            ],
+            choices: categoryOptions,
             validate(selection: number[]) {
               if (selection.length < 1) {
                 return 'You must choose project category!';
               }
               return true;
             }
-          }, {
-            type: 'input',
-            name: 'name',
-            message: 'Please input package name:',
-            validate(inputContent: string) {
-              if (inputContent === undefined || inputContent === '') {
-                return 'You must input package name!';
+          });
+          const selectedTemplate = manifest[categories[category as number]];
+          const uniqueArr = Array.from(new Set(Object.values(selectedTemplate.needInjectFiles).reduce((a, b) => {
+            return a.concat(b);
+          }, [])));
+          const questions: QuestionCollection = uniqueArr.map(key => {
+            const q: {
+              [key: string]: any;
+              default?: string;
+            } = {
+              type: 'input',
+              name: key,
+              message: `Please input package ${key}`,
+              validate(inputContent: string) {
+                if (inputContent === undefined || inputContent === '') {
+                  return `You must input package ${key}!`;
+                }
+                if (key === 'version') {
+                  const r = semver.valid(inputContent);
+                  if (r === null) {
+                    return 'You muse input valid version!';
+                  }
+                }
+                return true;
               }
-              return true;
+            };
+            if (key === 'version') {
+              q['default'] = '0.1.1';
             }
-          }, {
-            type: 'input',
-            name: 'version',
-            message: 'Please input package version:',
-            default: '0.1.1',
-            validate(inputContent: string) {
-              if (inputContent === undefined || inputContent === '') {
-                return 'You must input package version!';
-              }
-              const r = semver.valid(inputContent);
-              if (r === null) {
-                return 'You muse input valid version!';
-              }
-              return true;
-            }
-          }, {
-            type: 'input',
-            name: 'description',
-            message: 'Please input package description:',
-            validate(inputContent: string) {
-              if (inputContent === undefined || inputContent === '') {
-                return 'You must input package description!';
-              }
-              return true;
-            }
-          }, {
-            type: 'input',
-            name: 'commandName',
-            message: 'Please input commandName:',
-            validate(inputContent: string) {
-              if (inputContent === undefined || inputContent === '') {
-                return 'You must input commandName!';
-              }
-              return true;
-            }
-          }, {
-            type: 'input',
-            name: 'author',
-            message: 'Please input author:',
-            validate(inputContent: string) {
-              if (inputContent === undefined || inputContent === '') {
-                return 'You must input author!';
-              }
-              return true;
-            }
-          }]);
+            return q;
+          });
+
+          const answers = await inquirer.prompt(questions);
+          answers['category'] = category;
           resolve(answers);
         } catch (e) {
           reject(e);
