@@ -1,6 +1,6 @@
 {
   "name": "bluefox-cli",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "frontend project cli tool",
   "main": "./dist/index.js",
   "bin": {
@@ -10,11 +10,13 @@
     "prod": "gulp",
     "dev": "gulp debug",
     "lint": "gulp lint",
-    "build": "gulp"
+    "build": "gulp",
+    "start": "gulp && node ./bin/start.js init"
   },
   "author": "bluefox",
   "license": "ISC",
   "devDependencies": {
+    "@types/vorpal": "^1.12.0",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "del": "^5.1.0",
@@ -25,5 +27,8 @@
     "gulp-typescript": "^5.0.1",
     "merge2": "^1.3.0",
     "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "vorpal": "^1.12.0"
   }
 }
