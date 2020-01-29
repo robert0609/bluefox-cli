@@ -1,21 +1,25 @@
-import Vorpal, { CommandInstance } from 'vorpal';
-// import packageInfo from '../package.json';
+// import ejs from 'ejs';
+// import path from 'path';
+// import fs from 'fs';
+import { inquire } from './inquire';
 
-const vorpal = new Vorpal();
 
-vorpal
-  .command('init', 'init project')
-  .action(async function (this: CommandInstance, args) {
-    const r1 = await this.prompt({
-      type: 'checkbox',
-      name: 'project category',
-      message: 'please select category:',
-      choices: [
-        { name: 'vue micro app', value: 1, short: 'vma' },
-        { name: 'vue component', value: 2, short: 'vc'}
-      ]
-    });
-    console.log(r1);
-  });
+// const content = fs.readFileSync(path.resolve(__dirname, '../test_template/package.json'), 'utf8');
+// const template = ejs.compile(content);
+// const result = template({
+//   name: 'test-project',
+//   description: 'project description',
+//   commandName: 'tp',
+//   author: '1v1'
+// });
+// console.log(result);
 
-vorpal.show().parse(process.argv);
+(async function () {
+  // download template repo
+  // inquire developer, get config info
+  const configInfo = await inquire();
+  console.log(configInfo);
+  // fill template, output destination dir
+}()).catch(error => {
+  console.error(error);
+});
