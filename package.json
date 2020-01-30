@@ -1,6 +1,6 @@
 {
   "name": "bluefox-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "frontend project cli tool",
   "main": "./dist/index.js",
   "bin": {
@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/ejs": "^3.0.0",
     "@types/inquirer": "^6.5.0",
+    "@types/rimraf": "^2.0.3",
     "@types/semver": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
@@ -37,6 +38,7 @@
     "ejs": "^3.0.1",
     "inquirer": "^7.0.4",
     "ora": "^4.0.3",
+    "rimraf": "^3.0.1",
     "semver": "^7.1.1"
   }
 }

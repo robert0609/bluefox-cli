@@ -2,9 +2,17 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
+var rm = __importStar(require("rimraf"));
 /**
  * 复制文件
  * @param {String} sourceFile
@@ -40,9 +48,7 @@ function readDir(dir) {
 exports.readDir = readDir;
 function removeDir(dir) {
     if (isDirExist(dir)) {
-        fs_1.default.rmdirSync(dir, {
-            recursive: true
-        });
+        rm.sync(dir);
     }
 }
 exports.removeDir = removeDir;

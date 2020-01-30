@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import * as rm from 'rimraf';
 
 /**
  * 复制文件
@@ -36,9 +37,7 @@ export function readDir(dir: string): fs.Dirent[] {
 
 export function removeDir(dir: string): void {
   if (isDirExist(dir)) {
-    fs.rmdirSync(dir, {
-      recursive: true
-    });
+    rm.sync(dir);
   }
 }
 
