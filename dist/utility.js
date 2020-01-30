@@ -26,6 +26,10 @@ function writeFile(destinationFile, data) {
     });
 }
 exports.writeFile = writeFile;
+function isDirExist(dir) {
+    return fs_1.default.existsSync(dir);
+}
+exports.isDirExist = isDirExist;
 function readDir(dir) {
     var dirents = fs_1.default.readdirSync(dir, {
         encoding: 'utf8',
@@ -34,6 +38,14 @@ function readDir(dir) {
     return dirents;
 }
 exports.readDir = readDir;
+function removeDir(dir) {
+    if (isDirExist(dir)) {
+        fs_1.default.rmdirSync(dir, {
+            recursive: true
+        });
+    }
+}
+exports.removeDir = removeDir;
 function traverseDir(baseDir, relativeDir, handleFileContent) {
     var fullDir = path_1.default.normalize(path_1.default.join(baseDir, relativeDir));
     var dirents = readDir(fullDir);
@@ -49,10 +61,6 @@ function traverseDir(baseDir, relativeDir, handleFileContent) {
     });
 }
 exports.traverseDir = traverseDir;
-function isDirExist(dir) {
-    return fs_1.default.existsSync(dir);
-}
-exports.isDirExist = isDirExist;
 function makeDir(dir) {
     fs_1.default.mkdirSync(dir, {
         recursive: true

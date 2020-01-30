@@ -43,6 +43,7 @@ var download_git_repo_1 = __importDefault(require("download-git-repo"));
 var path_1 = __importDefault(require("path"));
 var os_1 = __importDefault(require("os"));
 var ora_1 = __importDefault(require("ora"));
+var utility_1 = require("./utility");
 function loadRemoteTemplate(repo) {
     return __awaiter(this, void 0, void 0, function () {
         var spinner;
@@ -56,6 +57,9 @@ function loadRemoteTemplate(repo) {
                     _a.trys.push([1, , 3, 4]);
                     return [4 /*yield*/, new Promise(function (resolve, reject) {
                             var tmpDir = path_1.default.normalize(path_1.default.join(os_1.default.tmpdir(), 'bluefox-template'));
+                            if (utility_1.isDirExist(tmpDir)) {
+                                utility_1.removeDir(tmpDir);
+                            }
                             download_git_repo_1.default(repo, tmpDir, function (err) {
                                 if (err) {
                                     reject(err);

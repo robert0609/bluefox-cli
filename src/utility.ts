@@ -22,12 +22,24 @@ export function writeFile(destinationFile: string, data: string) {
   });
 }
 
+export function isDirExist(dir: string): boolean {
+  return fs.existsSync(dir);
+}
+
 export function readDir(dir: string): fs.Dirent[] {
   const dirents = fs.readdirSync(dir, {
     encoding: 'utf8',
     withFileTypes: true
   });
   return dirents;
+}
+
+export function removeDir(dir: string): void {
+  if (isDirExist(dir)) {
+    fs.rmdirSync(dir, {
+      recursive: true
+    });
+  }
 }
 
 export function traverseDir(baseDir: string, relativeDir: string, handleFileContent?: ((baseDir: string, relativeDir: string, fileName: string) => void)) {
@@ -42,10 +54,6 @@ export function traverseDir(baseDir: string, relativeDir: string, handleFileCont
       }
     }
   });
-}
-
-export function isDirExist(dir: string): boolean {
-  return fs.existsSync(dir);
 }
 
 export function makeDir(dir: string) {
