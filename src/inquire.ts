@@ -69,7 +69,7 @@ export async function inquire() {
             } = {
               type: 'input',
               name: key,
-              message: `Please input package ${key}`,
+              message: `Please input package ${key}:`,
               validate(inputContent: string) {
                 if (inputContent === undefined || inputContent === '') {
                   return `You must input package ${key}!`;
