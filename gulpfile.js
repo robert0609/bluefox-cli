@@ -17,7 +17,7 @@ function clean() {
 var tsProject = ts.createProject('./tsconfig.json');
 
 function compile() {
-  return gulp.src('./src/**/*.ts')
+  return gulp.src(tsProject.config.include)
     .pipe(sourcemaps.init())
     .pipe(tsProject())
     .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '../src' }))
@@ -74,7 +74,7 @@ process.on('SIGINT', () => {
 var watcher = null;
 
 function watch(done) {
-  watcher = gulp.watch('./src/**/*.ts', gulp.series(
+  watcher = gulp.watch(tsProject.config.include, gulp.series(
     terminate,
     lint,
     clean,
