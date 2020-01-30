@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/IManifest.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,SAAS;IACxB,CAAC,GAAG,EAAE,MAAM,GAAG;QACb,cAAc,EAAE,MAAM,CAAC;QACvB,eAAe,EAAE;YACf,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,EAAE,CAAC;SACzB,CAAC;KACH,CAAC;CACH","file":"IManifest.d.ts","sourceRoot":"../src"}

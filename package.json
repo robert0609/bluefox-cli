@@ -31,10 +31,12 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "chalk": "^3.0.0",
     "commander": "^4.1.0",
     "download-git-repo": "^3.0.2",
     "ejs": "^3.0.1",
     "inquirer": "^7.0.4",
+    "ora": "^4.0.3",
     "semver": "^7.1.1"
   }
 }

@@ -22,8 +22,7 @@ function fillConfig(content: string, varibles: any): string {
   const selectedTemplate = manifest[categories[configInfo.category as number]];
 
   // fill template, output destination dir
-  // TODO: const destinationDir = process.cwd();
-  const destinationDir = path.resolve(__dirname, '../target');
+  const destinationDir = path.resolve(process.cwd(), configInfo['name']);
   const sourceTemplateDir = path.resolve(sourceDir, selectedTemplate.templateFolder);
   const needInjectFiles: {
     [key: string]: string[];
