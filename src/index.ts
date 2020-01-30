@@ -2,8 +2,6 @@ import ejs from 'ejs';
 import path from 'path';
 import { inquire, IInquireResult } from './inquire';
 import { traverseDir, isDirExist, makeDir, copyFile, readFile, writeFile } from './utility';
-import { IManifest } from './IManifest';
-import { loadRemoteTemplate } from './loadTemplate';
 
 function fillConfig(content: string, varibles: any): string {
   const template = ejs.compile(content);
@@ -12,18 +10,11 @@ function fillConfig(content: string, varibles: any): string {
 }
 
 (async function () {
-  // download template repo, load manifest
-  const sourceDir = await loadRemoteTemplate('robert0609/fe-project');
-  const manifest = JSON.parse(readFile(path.resolve(sourceDir, 'manifest.json'))) as IManifest;
-  const categories = Object.keys(manifest);
-
   // inquire developer, get config info
-  const configInfo = await inquire(manifest);
-  const selectedTemplate = manifest[categories[configInfo.category as number]];
+  const { configInfo, selectedTemplate, sourceTemplateDir } = await inquire();
 
   // fill template, output destination dir
   const destinationDir = path.resolve(process.cwd(), configInfo['name']);
-  const sourceTemplateDir = path.resolve(sourceDir, selectedTemplate.templateFolder);
   const needInjectFiles: {
     [key: string]: string[];
   } = {};

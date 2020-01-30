@@ -43,7 +43,6 @@ var ejs_1 = __importDefault(require("ejs"));
 var path_1 = __importDefault(require("path"));
 var inquire_1 = require("./inquire");
 var utility_1 = require("./utility");
-var loadTemplate_1 = require("./loadTemplate");
 function fillConfig(content, varibles) {
     var template = ejs_1.default.compile(content);
     var result = template(varibles);
@@ -51,20 +50,13 @@ function fillConfig(content, varibles) {
 }
 (function () {
     return __awaiter(this, void 0, void 0, function () {
-        var sourceDir, manifest, categories, configInfo, selectedTemplate, destinationDir, sourceTemplateDir, needInjectFiles, k;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('robert0609/fe-project')];
+        var _a, configInfo, selectedTemplate, sourceTemplateDir, destinationDir, needInjectFiles, k;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, inquire_1.inquire()];
                 case 1:
-                    sourceDir = _a.sent();
-                    manifest = JSON.parse(utility_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
-                    categories = Object.keys(manifest);
-                    return [4 /*yield*/, inquire_1.inquire(manifest)];
-                case 2:
-                    configInfo = _a.sent();
-                    selectedTemplate = manifest[categories[configInfo.category]];
+                    _a = _b.sent(), configInfo = _a.configInfo, selectedTemplate = _a.selectedTemplate, sourceTemplateDir = _a.sourceTemplateDir;
                     destinationDir = path_1.default.resolve(process.cwd(), configInfo['name']);
-                    sourceTemplateDir = path_1.default.resolve(sourceDir, selectedTemplate.templateFolder);
                     needInjectFiles = {};
                     for (k in selectedTemplate.needInjectFiles) {
                         needInjectFiles[path_1.default.normalize(path_1.default.join(sourceTemplateDir, k))] = selectedTemplate.needInjectFiles[k];

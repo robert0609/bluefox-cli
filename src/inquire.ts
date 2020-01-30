@@ -1,23 +1,29 @@
 import Commander from 'commander';
+import path from 'path';
 import inquirer, { QuestionCollection } from 'inquirer';
 import packageInfo from '../package.json';
 import semver from 'semver';
 import { IManifest } from './IManifest.js';
+import { loadRemoteTemplate } from './loadTemplate';
+import { readFile } from './utility.js';
 
 export interface IInquireResult {
   [key: string]: any;
 }
 
-export async function inquire(manifest: IManifest) {
-  const categories = Object.keys(manifest);
-  const categoryOptions = categories.map((n, i) => {
-    return {
-      name: n,
-      value: i
-    }
-  });
+export interface IWrapperInquireResult {
+  configInfo: IInquireResult;
+  sourceTemplateDir: string;
+  selectedTemplate: {
+    templateFolder: string;
+    needInjectFiles: {
+      [key: string]: string[];
+    };
+  };
+}
 
-  return await new Promise<IInquireResult>((resolve, reject) => {
+export async function inquire() {
+  return await new Promise<IWrapperInquireResult>((resolve, reject) => {
     const program = new Commander.Command();
     program.version(packageInfo.version);
 
@@ -25,6 +31,18 @@ export async function inquire(manifest: IManifest) {
       .command('init')
       .description('init project')
       .action(async function () {
+        // download template repo, load manifest
+        const sourceDir = await loadRemoteTemplate('robert0609/fe-project');
+        const manifest = JSON.parse(readFile(path.resolve(sourceDir, 'manifest.json'))) as IManifest;
+        const categories = Object.keys(manifest);
+        const categoryOptions = categories.map((n, i) => {
+          return {
+            name: n,
+            value: i
+          }
+        });
+
+        // inquire developer, get config info
         try {
           const { category } = await inquirer.prompt({
             type: 'list',
@@ -39,6 +57,8 @@ export async function inquire(manifest: IManifest) {
             }
           });
           const selectedTemplate = manifest[categories[category as number]];
+          const sourceTemplateDir = path.resolve(sourceDir, selectedTemplate.templateFolder);
+
           const uniqueArr = Array.from(new Set(Object.values(selectedTemplate.needInjectFiles).reduce((a, b) => {
             return a.concat(b);
           }, [])));
@@ -71,7 +91,7 @@ export async function inquire(manifest: IManifest) {
 
           const answers = await inquirer.prompt(questions);
           answers['category'] = category;
-          resolve(answers);
+          resolve({ configInfo: answers, selectedTemplate, sourceTemplateDir });
         } catch (e) {
           reject(e);
         }

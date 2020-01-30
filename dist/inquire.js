@@ -40,93 +40,100 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var commander_1 = __importDefault(require("commander"));
+var path_1 = __importDefault(require("path"));
 var inquirer_1 = __importDefault(require("inquirer"));
 var package_json_1 = __importDefault(require("../package.json"));
 var semver_1 = __importDefault(require("semver"));
-function inquire(manifest) {
+var loadTemplate_1 = require("./loadTemplate");
+var utility_js_1 = require("./utility.js");
+function inquire() {
     return __awaiter(this, void 0, void 0, function () {
-        var categories, categoryOptions;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    categories = Object.keys(manifest);
-                    categoryOptions = categories.map(function (n, i) {
-                        return {
-                            name: n,
-                            value: i
-                        };
-                    });
-                    return [4 /*yield*/, new Promise(function (resolve, reject) {
-                            var program = new commander_1.default.Command();
-                            program.version(package_json_1.default.version);
-                            program
-                                .command('init')
-                                .description('init project')
-                                .action(function () {
-                                return __awaiter(this, void 0, void 0, function () {
-                                    var category, selectedTemplate, uniqueArr, questions, answers, e_1;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0:
-                                                _a.trys.push([0, 3, , 4]);
-                                                return [4 /*yield*/, inquirer_1.default.prompt({
-                                                        type: 'list',
-                                                        name: 'category',
-                                                        message: 'Please select project category:',
-                                                        choices: categoryOptions,
-                                                        validate: function (selection) {
-                                                            if (selection.length < 1) {
-                                                                return 'You must choose project category!';
-                                                            }
-                                                            return true;
+                case 0: return [4 /*yield*/, new Promise(function (resolve, reject) {
+                        var program = new commander_1.default.Command();
+                        program.version(package_json_1.default.version);
+                        program
+                            .command('init')
+                            .description('init project')
+                            .action(function () {
+                            return __awaiter(this, void 0, void 0, function () {
+                                var sourceDir, manifest, categories, categoryOptions, category, selectedTemplate, sourceTemplateDir, uniqueArr, questions, answers, e_1;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('robert0609/fe-project')];
+                                        case 1:
+                                            sourceDir = _a.sent();
+                                            manifest = JSON.parse(utility_js_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
+                                            categories = Object.keys(manifest);
+                                            categoryOptions = categories.map(function (n, i) {
+                                                return {
+                                                    name: n,
+                                                    value: i
+                                                };
+                                            });
+                                            _a.label = 2;
+                                        case 2:
+                                            _a.trys.push([2, 5, , 6]);
+                                            return [4 /*yield*/, inquirer_1.default.prompt({
+                                                    type: 'list',
+                                                    name: 'category',
+                                                    message: 'Please select project category:',
+                                                    choices: categoryOptions,
+                                                    validate: function (selection) {
+                                                        if (selection.length < 1) {
+                                                            return 'You must choose project category!';
                                                         }
-                                                    })];
-                                            case 1:
-                                                category = (_a.sent()).category;
-                                                selectedTemplate = manifest[categories[category]];
-                                                uniqueArr = Array.from(new Set(Object.values(selectedTemplate.needInjectFiles).reduce(function (a, b) {
-                                                    return a.concat(b);
-                                                }, [])));
-                                                questions = uniqueArr.map(function (key) {
-                                                    var q = {
-                                                        type: 'input',
-                                                        name: key,
-                                                        message: "Please input package " + key,
-                                                        validate: function (inputContent) {
-                                                            if (inputContent === undefined || inputContent === '') {
-                                                                return "You must input package " + key + "!";
-                                                            }
-                                                            if (key === 'version') {
-                                                                var r = semver_1.default.valid(inputContent);
-                                                                if (r === null) {
-                                                                    return 'You muse input valid version!';
-                                                                }
-                                                            }
-                                                            return true;
-                                                        }
-                                                    };
-                                                    if (key === 'version') {
-                                                        q['default'] = '0.1.1';
+                                                        return true;
                                                     }
-                                                    return q;
-                                                });
-                                                return [4 /*yield*/, inquirer_1.default.prompt(questions)];
-                                            case 2:
-                                                answers = _a.sent();
-                                                answers['category'] = category;
-                                                resolve(answers);
-                                                return [3 /*break*/, 4];
-                                            case 3:
-                                                e_1 = _a.sent();
-                                                reject(e_1);
-                                                return [3 /*break*/, 4];
-                                            case 4: return [2 /*return*/];
-                                        }
-                                    });
+                                                })];
+                                        case 3:
+                                            category = (_a.sent()).category;
+                                            selectedTemplate = manifest[categories[category]];
+                                            sourceTemplateDir = path_1.default.resolve(sourceDir, selectedTemplate.templateFolder);
+                                            uniqueArr = Array.from(new Set(Object.values(selectedTemplate.needInjectFiles).reduce(function (a, b) {
+                                                return a.concat(b);
+                                            }, [])));
+                                            questions = uniqueArr.map(function (key) {
+                                                var q = {
+                                                    type: 'input',
+                                                    name: key,
+                                                    message: "Please input package " + key,
+                                                    validate: function (inputContent) {
+                                                        if (inputContent === undefined || inputContent === '') {
+                                                            return "You must input package " + key + "!";
+                                                        }
+                                                        if (key === 'version') {
+                                                            var r = semver_1.default.valid(inputContent);
+                                                            if (r === null) {
+                                                                return 'You muse input valid version!';
+                                                            }
+                                                        }
+                                                        return true;
+                                                    }
+                                                };
+                                                if (key === 'version') {
+                                                    q['default'] = '0.1.1';
+                                                }
+                                                return q;
+                                            });
+                                            return [4 /*yield*/, inquirer_1.default.prompt(questions)];
+                                        case 4:
+                                            answers = _a.sent();
+                                            answers['category'] = category;
+                                            resolve({ configInfo: answers, selectedTemplate: selectedTemplate, sourceTemplateDir: sourceTemplateDir });
+                                            return [3 /*break*/, 6];
+                                        case 5:
+                                            e_1 = _a.sent();
+                                            reject(e_1);
+                                            return [3 /*break*/, 6];
+                                        case 6: return [2 /*return*/];
+                                    }
                                 });
                             });
-                            program.parseAsync(process.argv);
-                        })];
+                        });
+                        program.parseAsync(process.argv);
+                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
