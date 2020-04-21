@@ -45,7 +45,7 @@ var inquirer_1 = __importDefault(require("inquirer"));
 var package_json_1 = __importDefault(require("../package.json"));
 var semver_1 = __importDefault(require("semver"));
 var loadTemplate_1 = require("./loadTemplate");
-var utility_js_1 = require("./utility.js");
+var utility_1 = require("./utility");
 function inquire() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -64,7 +64,7 @@ function inquire() {
                                         case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('robert0609/fe-project')];
                                         case 1:
                                             sourceDir = _a.sent();
-                                            manifest = JSON.parse(utility_js_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
+                                            manifest = JSON.parse(utility_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
                                             categories = Object.keys(manifest);
                                             categoryOptions = categories.map(function (n, i) {
                                                 return {
@@ -106,7 +106,7 @@ function inquire() {
                                                         if (key === 'version') {
                                                             var r = semver_1.default.valid(inputContent);
                                                             if (r === null) {
-                                                                return 'You muse input valid version!';
+                                                                return 'You must input valid version!';
                                                             }
                                                         }
                                                         return true;

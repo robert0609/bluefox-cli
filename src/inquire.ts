@@ -3,9 +3,9 @@ import path from 'path';
 import inquirer, { QuestionCollection } from 'inquirer';
 import packageInfo from '../package.json';
 import semver from 'semver';
-import { IManifest } from './IManifest.js';
+import { IManifest } from './IManifest';
 import { loadRemoteTemplate } from './loadTemplate';
-import { readFile } from './utility.js';
+import { readFile } from './utility';
 
 export interface IInquireResult {
   [key: string]: any;
@@ -77,7 +77,7 @@ export async function inquire() {
                 if (key === 'version') {
                   const r = semver.valid(inputContent);
                   if (r === null) {
-                    return 'You muse input valid version!';
+                    return 'You must input valid version!';
                   }
                 }
                 return true;
