@@ -39,6 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.inquire = void 0;
 var commander_1 = __importDefault(require("commander"));
 var path_1 = __importDefault(require("path"));
 var inquirer_1 = __importDefault(require("inquirer"));
@@ -58,19 +59,29 @@ function inquire() {
                             .description('init project')
                             .action(function () {
                             return __awaiter(this, void 0, void 0, function () {
-                                var sourceDir, manifest, categories, categoryOptions, category, selectedTemplate, sourceTemplateDir, uniqueArr, questions, answers, e_1;
+                                var sourceDir, projectGroup, manifest, categories, categoryOptions, groupNames, category, selectedTemplate, sourceTemplateDir, validation_1, uniqueArr, questions, answers, categoryName, e_1;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('robert0609/fe-project')];
+                                        case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('100talxes1v1/fe-project')];
                                         case 1:
                                             sourceDir = _a.sent();
-                                            manifest = JSON.parse(utility_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
-                                            categories = Object.keys(manifest);
-                                            categoryOptions = categories.map(function (n, i) {
-                                                return {
-                                                    name: n,
-                                                    value: i
-                                                };
+                                            projectGroup = JSON.parse(utility_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));
+                                            manifest = {};
+                                            categories = [];
+                                            categoryOptions = [];
+                                            groupNames = Object.keys(projectGroup);
+                                            groupNames.forEach(function (groupName) {
+                                                categoryOptions.push(new inquirer_1.default.Separator(groupName));
+                                                var groupManifest = projectGroup[groupName];
+                                                var projectNames = Object.keys(groupManifest);
+                                                projectNames.forEach(function (c, i) {
+                                                    manifest[c] = groupManifest[c];
+                                                    categoryOptions.push({
+                                                        name: c,
+                                                        value: i + categories.length
+                                                    });
+                                                });
+                                                categories.push.apply(categories, projectNames);
                                             });
                                             _a.label = 2;
                                         case 2:
@@ -91,6 +102,7 @@ function inquire() {
                                             category = (_a.sent()).category;
                                             selectedTemplate = manifest[categories[category]];
                                             sourceTemplateDir = path_1.default.resolve(sourceDir, selectedTemplate.templateFolder);
+                                            validation_1 = selectedTemplate.validation;
                                             uniqueArr = Array.from(new Set(Object.values(selectedTemplate.needInjectFiles).reduce(function (a, b) {
                                                 return a.concat(b);
                                             }, [])));
@@ -109,6 +121,14 @@ function inquire() {
                                                                 return 'You must input valid version!';
                                                             }
                                                         }
+                                                        // 如果有配置了validation，则要追加自定义校验处理
+                                                        if (validation_1 && validation_1[key]) {
+                                                            var validate = validation_1[key];
+                                                            var regex = new RegExp(validate.rule);
+                                                            if (!regex.test(inputContent)) {
+                                                                return validate.message;
+                                                            }
+                                                        }
                                                         return true;
                                                     }
                                                 };
@@ -120,7 +140,17 @@ function inquire() {
                                             return [4 /*yield*/, inquirer_1.default.prompt(questions)];
                                         case 4:
                                             answers = _a.sent();
-                                            answers['category'] = category;
+                                            categoryName = categories[category];
+                                            answers['category'] = categoryName;
+                                            // 判断如果是选择的Boston微前端的项目模板，则生成name配置项
+                                            if (categoryName.startsWith('boston')) {
+                                                if (answers['libraryName']) {
+                                                    answers['name'] = "boston-library-" + answers['libraryName'];
+                                                }
+                                                else if (answers['appName']) {
+                                                    answers['name'] = "boston-app-" + answers['appName'];
+                                                }
+                                            }
                                             resolve({ configInfo: answers, selectedTemplate: selectedTemplate, sourceTemplateDir: sourceTemplateDir });
                                             return [3 /*break*/, 6];
                                         case 5:
