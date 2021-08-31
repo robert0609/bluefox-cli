@@ -6,7 +6,7 @@ import { isDirExist, removeDir } from './utility';
 
 const projectUrl = 'https://butterfly001.oss-cn-beijing.aliyuncs.com/project/fe-project.zip';
 
-export async function loadRemoteTemplate(repo: string): Promise<string> {
+export async function loadRemoteTemplate(): Promise<string> {
   const spinner = ora('fetching project template...');
   spinner.start();
   try {
@@ -17,7 +17,7 @@ export async function loadRemoteTemplate(repo: string): Promise<string> {
     await download(projectUrl, tmpDir, {
       extract: true
     });
-    return tmpDir;
+    return `${tmpDir}/fe-project`;
   } finally {
     spinner.stop();
   }

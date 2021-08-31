@@ -33,7 +33,7 @@ export async function inquire() {
       .description('init project')
       .action(async function () {
         // download template repo, load manifest
-        const sourceDir = await loadRemoteTemplate('100talxes1v1/fe-project');
+        const sourceDir = await loadRemoteTemplate();
         const projectGroup = JSON.parse(readFile(path.resolve(sourceDir, 'manifest.json'))) as IProjectGroup;
 
         let manifest: IManifest = {};

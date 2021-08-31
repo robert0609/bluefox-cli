@@ -1,1 +1,1 @@
-export declare function loadRemoteTemplate(repo: string): Promise<string>;
+export declare function loadRemoteTemplate(): Promise<string>;

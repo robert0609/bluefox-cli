@@ -62,7 +62,7 @@ function inquire() {
                                 var sourceDir, projectGroup, manifest, categories, categoryOptions, groupNames, category, selectedTemplate, sourceTemplateDir, validation_1, uniqueArr, questions, answers, categoryName, e_1;
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
-                                        case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate('100talxes1v1/fe-project')];
+                                        case 0: return [4 /*yield*/, loadTemplate_1.loadRemoteTemplate()];
                                         case 1:
                                             sourceDir = _a.sent();
                                             projectGroup = JSON.parse(utility_1.readFile(path_1.default.resolve(sourceDir, 'manifest.json')));

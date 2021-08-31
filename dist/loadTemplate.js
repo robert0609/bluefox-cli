@@ -40,14 +40,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loadRemoteTemplate = void 0;
-var download_git_repo_1 = __importDefault(require("download-git-repo"));
+var download_1 = __importDefault(require("download"));
 var path_1 = __importDefault(require("path"));
 var os_1 = __importDefault(require("os"));
 var ora_1 = __importDefault(require("ora"));
 var utility_1 = require("./utility");
-function loadRemoteTemplate(repo) {
+var projectUrl = 'https://butterfly001.oss-cn-beijing.aliyuncs.com/project/fe-project.zip';
+function loadRemoteTemplate() {
     return __awaiter(this, void 0, void 0, function () {
-        var spinner;
+        var spinner, tmpDir;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -56,21 +57,16 @@ function loadRemoteTemplate(repo) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, , 3, 4]);
-                    return [4 /*yield*/, new Promise(function (resolve, reject) {
-                            var tmpDir = path_1.default.normalize(path_1.default.join(os_1.default.tmpdir(), 'bluefox-template'));
-                            if (utility_1.isDirExist(tmpDir)) {
-                                utility_1.removeDir(tmpDir);
-                            }
-                            download_git_repo_1.default(repo, tmpDir, function (err) {
-                                if (err) {
-                                    reject(err);
-                                }
-                                else {
-                                    resolve(tmpDir);
-                                }
-                            });
+                    tmpDir = path_1.default.normalize(path_1.default.join(os_1.default.tmpdir(), 'bluefox-template'));
+                    if (utility_1.isDirExist(tmpDir)) {
+                        utility_1.removeDir(tmpDir);
+                    }
+                    return [4 /*yield*/, download_1.default(projectUrl, tmpDir, {
+                            extract: true
                         })];
-                case 2: return [2 /*return*/, _a.sent()];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, tmpDir + "/fe-project"];
                 case 3:
                     spinner.stop();
                     return [7 /*endfinally*/];
